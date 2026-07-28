@@ -34,7 +34,7 @@ Track expiration dates of blood units.
 The first thing to do is to clone the repository:
 
 ```sh
-$ git clone https://github.com/MeetSherasiya/Bloodbank_Managment_System.git
+$ git clone https://github.com/subingaire-bit/Khoonn.git
 $ cd Bloodbank_Managment_System
 ```
 
