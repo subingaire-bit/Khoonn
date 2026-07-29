@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-k*@j6=^91^f^p9ij0=b_)ao(jn*@n7sx8&%bf7q2e4b8d8+w(t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://hellothere3232.pythonanywhere.com/']
+ALLOWED_HOSTS = ['https://hellothere3232.pythonanywhere.com/','localhost', '127.0.0.1']
 
 
 # Application definition
@@ -123,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
