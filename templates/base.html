@@ -245,6 +245,152 @@
 
     <script src="{% static 'plugins/tables/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
+        <!-- ********************************** -->
+    <!-- AI Chatbot Widget Start -->
+    <!-- ********************************** -->
+    <button id="chat-toggle" class="btn btn-danger rounded-circle" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4); z-index: 9999; display: flex; align-items: center; justify-content: center; font-size: 24px; border: none;">
+        💬
+    </button>
+
+    <div id="chat-box" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 350px; height: 450px; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); flex-direction: column; z-index: 9999; overflow: hidden; font-family: inherit;">
+        <!-- Chat Header -->
+        <div style="background: #dc3545; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <span>🩸 Kyuu AI</span>
+            <button id="chat-close" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        
+        <!-- Chat Messages Area -->
+        <div id="chat-messages" style="flex: 1; padding: 15px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 10px;">
+            <div style="align-self: flex-start; background: #e9ecef; color: #333; padding: 10px 15px; border-radius: 15px 15px 15px 0; max-width: 85%; font-size: 14px; line-height: 1.4;">
+                Hello! I'm the Kyuu AI. How can I help you with blood donation, eligibility, or requests today?
+            </div>
+        </div>
+        
+        <!-- Chat Input Area -->
+        <div style="display: flex; padding: 12px; background: white; border-top: 1px solid #eee;">
+            <input type="text" id="chat-input" placeholder="Type your question..." style="flex: 1; padding: 10px 15px; border: 1px solid #ced4da; border-radius: 20px; outline: none; font-size: 14px;">
+            <button id="chat-send" style="margin-left: 8px; padding: 10px 15px; background: #dc3545; color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                ➤
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('chat-toggle');
+            const closeBtn = document.getElementById('chat-close');
+            const chatBox = document.getElementById('chat-box');
+            const sendBtn = document.getElementById('chat-send');
+            const inputField = document.getElementById('chat-input');
+            const messagesDiv = document.getElementById('chat-messages');
+            let chatHistory = [];
+
+            function toggleChat() {
+                chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
+                if (chatBox.style.display === 'flex') inputField.focus();
+            }
+
+            toggleBtn.addEventListener('click', toggleChat);
+            closeBtn.addEventListener('click', toggleChat);
+
+            function appendMessage(role, text) {
+                const msgDiv = document.createElement('div');
+                msgDiv.style.maxWidth = '85%';
+                msgDiv.style.fontSize = '14px';
+                msgDiv.style.lineHeight = '1.4';
+                
+                if (role === 'user') {
+                    msgDiv.style.alignSelf = 'flex-end';
+                    msgDiv.style.background = '#dc3545';
+                    msgDiv.style.color = 'white';
+                    msgDiv.style.borderRadius = '15px 15px 0 15px';
+                    msgDiv.style.padding = '10px 15px';
+                } else {
+                    msgDiv.style.alignSelf = 'flex-start';
+                    msgDiv.style.background = '#e9ecef';
+                    msgDiv.style.color = '#333';
+                    msgDiv.style.borderRadius = '15px 15px 15px 0';
+                    msgDiv.style.padding = '10px 15px';
+                }
+                msgDiv.textContent = text;
+                messagesDiv.appendChild(msgDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+
+            async function sendMessage() {
+                const text = inputField.value.trim();
+                if (!text) return;
+
+                appendMessage('user', text);
+                inputField.value = '';
+                
+                // Show typing indicator
+                const typingDiv = document.createElement('div');
+                typingDiv.id = 'typing-indicator';
+                typingDiv.style.alignSelf = 'flex-start';
+                typingDiv.style.background = '#e9ecef';
+                typingDiv.style.padding = '10px 15px';
+                typingDiv.style.borderRadius = '15px 15px 15px 0';
+                typingDiv.style.fontSize = '12px';
+                typingDiv.style.color = '#666';
+                typingDiv.textContent = 'Buddy is typing...';
+                messagesDiv.appendChild(typingDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+                chatHistory.push({"role": "user", "content": text});
+
+                try {
+                    const response = await fetch('/api/chat/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken') // Secure Django CSRF handling
+                        },
+                        body: JSON.stringify({message: text, history: chatHistory})
+                    });
+                    
+                    const indicator = document.getElementById('typing-indicator');
+                    if(indicator) indicator.remove();
+
+                    const data = await response.json();
+                    if (data.reply) {
+                        appendMessage('bot', data.reply);
+                        chatHistory.push({"role": "assistant", "content": data.reply});
+                    } else {
+                        appendMessage('bot', "Sorry, I encountered an error. Please try again.");
+                    }
+                } catch (error) {
+                    const indicator = document.getElementById('typing-indicator');
+                    if(indicator) indicator.remove();
+                    appendMessage('bot', "Sorry, I'm having trouble connecting to the server.");
+                }
+            }
+
+            sendBtn.addEventListener('click', sendMessage);
+            inputField.addEventListener('keypress', (e) => { 
+                if(e.key === 'Enter') sendMessage(); 
+            });
+
+            // Helper function to get CSRF token in Django
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+    <!-- ********************************** -->
+    <!-- AI Chatbot Widget End -->
+    <!-- ********************************** -->
 
 </body>
 </html>
