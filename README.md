@@ -1,96 +1,122 @@
-﻿# Bloodbank_Managment_System
+﻿# 🩸 Khoonn: Blood Bank Management System
 
-# Key Features:
+**Khoonn** is a comprehensive, secure, and user-friendly Blood Bank Management System designed to streamline blood donation, request processing, and inventory management. It connects donors, patients, and administrators on a single, intuitive platform.
 
-1. User Registration and Authentication:
-Users can register with the system.
-Authentication mechanisms to ensure secure access.
+---
 
-2. User Roles:
-Differentiate between regular users, donors, and administrators.
+## 📑 Table of Contents
+- [✨ Key Features](#-key-features)
+- [💻 Tech Stack](#-tech-stack)
+- [🚀 Setup & Installation](#-setup--installation)
+- [🔑 Default Admin Credentials](#-default-admin-credentials)
+- [📸 Application Screenshots](#-application-screenshots)
+- [🛡️ Security Note](#️-security-note)
 
-3. User Dashboard:
-Overview of previous donation history and pending requests.
+---
 
-4. Blood Donation:
-Donors can submit details about their blood donation.
-Track and display a history of donations for each donor.
+## ✨ Key Features
 
-5. Blood Request:
-Users can create requests for specific blood types.
-Admins can approve or reject requests.
+### 👤 User & Patient Features
+- **Secure Registration & Authentication**: Role-based access control for Patients, Donors, and Administrators.
+- **Personalized Dashboard**: Overview of previous donation history, pending requests, and status updates.
+- **Blood Requests**: Create and track requests for specific blood types with real-time status updates.
 
-6. Admin Dashboard:
-Access to a centralized dashboard for administrators.
-Overview of pending blood requests, donations, and available blood units.
+### 🩸 Donor Features
+- **Donation Submission**: Easily submit and update blood donation details.
+- **Donation History**: Track and view a complete history of past donations and impact.
 
-7. Blood Inventory Management:
-Admins can manage and update the inventory of available blood units.
-Track expiration dates of blood units.
+### 🛡️ Administrator Features
+- **Centralized Admin Dashboard**: High-level overview of pending requests, active donations, and overall system health.
+- **Request Management**: Approve or reject blood requests with a single click.
+- **Inventory Management**: Manage available blood units, update stock levels, and track expiration dates to prevent wastage.
 
+---
 
-## Setup
+## 💻 Tech Stack
+- **Backend**: Python, Django
+- **Frontend**: HTML5, CSS3, JavaScript, Bootstrap
+- **Database**: SQLite (Development) / PostgreSQL (Production)
+- **Environment**: Python Virtual Environment (`venv`)
 
-The first thing to do is to clone the repository:
+---
 
+## 🚀 Setup & Installation
+
+Follow these steps to get a local development copy up and running.
+
+### 1. Clone the Repository
 ```sh
-$ git clone https://github.com/subingaire-bit/Khoonn.git
-$ cd Bloodbank_Managment_System
+git clone https://github.com/subingaire-bit/Khoonn.git
+cd Khoonn
 ```
 
-Create a virtual environment to install dependencies in and activate it:
-
+### 2. Create and Activate a Virtual Environment
+*Recommended: Use the built-in Python `venv` module for a modern, clean setup.*
 ```sh
-$ virtualenv --no-site-packages env
-$ source env/bin/activate
+python -m venv env
+```
+- **On macOS/Linux**:
+  ```sh
+  source env/bin/activate
+  ```
+- **On Windows**:
+  ```sh
+  env\Scripts\activate
+  ```
+
+### 3. Install Dependencies
+```sh
+pip install -r requirements.txt
 ```
 
-Then install the dependencies:
-
+### 4. Apply Database Migrations
 ```sh
-(env)$ pip install -r requirements.txt
-```
-Note the `(env)` in front of the prompt. This indicates that this terminal
-session operates in a virtual environment set up by `virtualenv`.
-
-Once `pip` has finished downloading the dependencies:
-```sh
-(env)$ cd laundry_managment_system
-(env)$ python manage.py runserver
+python manage.py migrate
 ```
 
-## Login Credentials For Admin Access
+### 5. Run the Development Server
+```sh
+python manage.py runserver
+```
+The application will now be available at `http://127.0.0.1:8000/`
 
-Email : admin@admin.com<br>
-Password : admin@1234
+---
 
-# Software Pages Screenshot
+## 🔑 Default Admin Credentials
 
-## Dashboard Page
+Use these credentials to access the administrator dashboard. 
 
-<img src='screenshot/homepage.png' >
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@admin.com` | `admin@1234` |
 
-## Patient Login Page
+> ⚠️ **Security Note**: *Please change the default admin password immediately after your first login in any production or staging environment.*
 
-<img src='screenshot/patient_register.png' >
+---
 
-## Donor Login Page
+## 📸 Application Screenshots
 
-<img src='screenshot/donor_register.png' >
+| Page | Preview |
+| :--- | :---: |
+| **Dashboard** | <img src="screenshot/homepage.png" alt="Dashboard Page" width="400"> |
+| **Patient Registration** | <img src="screenshot/patient_register.png" alt="Patient Login Page" width="400"> |
+| **Donor Registration** | <img src="screenshot/donor_register.png" alt="Donor Login Page" width="400"> |
+| **Patient Blood Request** | <img src="screenshot/blood_request.png" alt="Patient Request Page" width="400"> |
+| **Donor Donation Request** | <img src="screenshot/blood_donate_request.png" alt="Donor Request Page" width="400"> |
+| **Patient Details** | <img src="screenshot/patient_details.png" alt="Patient Details Page" width="400"> |
+| **Donor Details** | <img src="screenshot/donor_details.png" alt="Donor Details Page" width="400"> |
 
-## Patient Request Page
+---
 
-<img src='screenshot/blood_request.png' >
+## 🤝 Contributing
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Donor Request Page
+---
 
-<img src='screenshot/blood_donate_request.png' >
-
-## Patient Details Page
-
-<img src='screenshot/patient_details.png' >
-
-## Donor Details Page
-<img src='screenshot/donor_details.png' >
-# Kyuu_khoon
-# Khoonn
+## 📄 License
+Distributed under the MIT License. See `LICENSE` for more information.
