@@ -80,6 +80,9 @@ WSGI_APPLICATION = 'bloodbank.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+import os
+
 # Smart Database Configuration: Uses Neon on Render, SQLite locally
 if os.getenv('DB_HOST'):
     DATABASES = {
@@ -93,13 +96,13 @@ if os.getenv('DB_HOST'):
         }
     }
 else:
-    # Fallback to local SQLite for development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

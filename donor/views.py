@@ -15,8 +15,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
 
-            # Add user to the "patient" group
-            group, created = Group.objects.get_or_create(name='Donor')
+           group, created = Group.objects.get_or_create(name='Donor')
             user.groups.add(group)
             messages.success(request, 'Donor Added Successfully')
             return redirect('patient-login')
